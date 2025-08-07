@@ -1,0 +1,6 @@
+com/example/updates/repository/UpdateRepository.class
+com/example/updates/controller/UpdateController.class
+com/example/updates/model/Update.class
+com/example/updates/model/SubTask.class
+com/example/updates/service/UpdateService.class
+com/example/updates/Application.class
