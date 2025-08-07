@@ -61,7 +61,8 @@ export default function Index() {
       timestamp: new Date()
     }
   ]);
-  
+
+  // The below Task -> is now labeled to be "Updates" in UI
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: '1',
@@ -178,6 +179,7 @@ export default function Index() {
   const [isListening, setIsListening] = useState(false);
   const [activeTab, setActiveTab] = useState<'updates' | 'tasks' | 'chat'>('chat');
   const [updatesFilter, setUpdatesFilter] = useState<'today' | 'yesterday' | 'week'>('today');
+  // Simple tasks for quick actions (Tasks in UI)
   const [simpleTasks, setSimpleTasks] = useState<SimpleTask[]>([
     { id: '1', title: 'Review daily security alerts', completed: false, createdAt: new Date() },
     { id: '2', title: 'Update firewall rules documentation', completed: true, createdAt: new Date() },
