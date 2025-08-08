@@ -577,9 +577,9 @@ The SharePoint vulnerability requires immediate attention. Should I help you pri
   };
 
   return (
-    <div className="h-screen bg-background flex justify-center dark">
+    <div className="h-screen bg-background flex justify-center">
       {/* Unified Mobile App Layout */}
-      <div className="w-full max-w-sm flex flex-col bg-background border-l border-r border-border">
+      <div className="w-full max-w-sm flex flex-col bg-background border-l border-r border-border dark">
         {/* App Header */}
         <div className="bg-card border-b border-border px-4 py-4">
           <div className="flex items-center gap-3">
