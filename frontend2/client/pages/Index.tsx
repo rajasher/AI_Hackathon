@@ -928,7 +928,7 @@ The SharePoint vulnerability requires immediate attention. Should I help you pri
                   <Button 
                     onClick={startVoiceInput} 
                     size="sm" 
-                    variant={isListening ? "default" : "outline"}
+                    variant={isListening ? "default" : "secondary"}
                     className={`px-2 h-8 ${isListening ? 'bg-red-500 hover:bg-red-600 text-white' : ''}`}
                     disabled={isListening}
                   >
