@@ -204,9 +204,9 @@ export default function Index() {
     const utterance = new SpeechSynthesisUtterance(text);
 
     // Configure voice settings based on EZ configuration (could be enhanced with settings)
-    utterance.rate = 0.9; // Slightly slower for clarity
+    utterance.rate = 2; // Slightly slower for clarity
     utterance.pitch = 1.0; // Normal pitch
-    utterance.volume = 0.8; // Slightly quieter
+    utterance.volume = 1; // Slightly quieter
 
     // Try to use a more natural voice if available
     const voices = window.speechSynthesis.getVoices();
@@ -252,83 +252,46 @@ export default function Index() {
     const shouldSpeak = fromVoice || wasVoiceInput;
     setWasVoiceInput(false); // Reset after use
 
-    // Simulate AI response
-    setTimeout(() => {
-      const responseContent = generateAIResponse(messageContent);
-      const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        content: responseContent,
-        sender: 'ai',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, aiResponse]);
-      setIsTyping(false);
+    const responseContent = await generateAIResponse(messageContent);
+    const aiResponse: Message = {
+      id: (Date.now() + 1).toString(),
+      content: responseContent,
+      sender: 'ai',
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, aiResponse]);
+    setIsTyping(false);
 
-      // Speak the response if it was voice input
-      if (shouldSpeak) {
-        setTimeout(() => speakText(responseContent), 500); // Small delay for better UX
-      }
-    }, 1500);
+    // Speak the response if it was voice input
+    if (shouldSpeak) {
+      setTimeout(() => speakText(responseContent), 500); // Small delay for better UX
+    }
   };
 
-  const generateAIResponse = (userInput: string): string => {
+  const generateAIResponse = async (userInput: string): Promise<string> => {
     const lowerInput = userInput.toLowerCase();
-    
-    // Updates/status inquiry - show the security tasks
-    if (lowerInput.includes('update') || lowerInput.includes('what') || lowerInput.includes('status') || lowerInput.includes('progress') || lowerInput.includes('need to know')) {
-      return `Here are your current security priorities:
 
-🚨 **SharePoint vulnerability** (High Priority - In Progress)
-Critical CVE-2024-21413 affecting 12 servers. Currently checking exploitation traces.
+    try {
+        const response = await fetch('http://localhost:8000/query', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'query': lowerInput }),
+        });
 
-📊 **Status submission for boss** (Medium Priority - Pending)  
-Weekly security report needs to be compiled and submitted.
-
-✅ **Security incident response** (Completed)
-Phishing incident successfully resolved, documentation complete.
-
-The SharePoint vulnerability requires immediate attention. Should I help you prioritize the remaining tasks?`;
-    }
-    
-    // Task creation pattern
-    if (lowerInput.includes('create') || lowerInput.includes('add')) {
-      // Extract potential task from user input
-      if (userInput.length > 20) {
-        const taskTitle = extractTaskFromInput(userInput);
-        if (taskTitle) {
-          createTaskFromChat(taskTitle);
-          return `Perfect! I've created a new security task: "${taskTitle}". I've added it to your task list with medium priority. You can adjust the priority and add more details in the task panel.`;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-      }
-      return "I can help you create a new security task! Please provide me with the task details like title, description, and priority level. For example: 'Create a task to investigate network anomaly' and I'll add it immediately.";
+
+        const data = await response.json();
+        // Assuming the API returns a JSON object with the response text in a 'response' property.
+        // Adjust 'data.response' if the API returns a different structure.
+        return data.response;
+    } catch (error) {
+        console.error('Error fetching AI response:', error);
+        return "Sorry, I'm having trouble connecting to the server.";
     }
-    
-    // Priority management
-    if (lowerInput.includes('priority') || lowerInput.includes('important') || lowerInput.includes('urgent')) {
-      const highPriorityTasks = tasks.filter(t => t.priority === 'high' && t.status !== 'completed').length;
-      return `You currently have ${highPriorityTasks} high-priority security tasks. ${
-        highPriorityTasks > 0 ? "The SharePoint vulnerability needs immediate attention - it's critical!" : 
-        "No urgent security tasks at the moment - great job staying ahead!"
-      } Would you like me to help you prioritize your security workflow?`;
-    }
-    
-    // Security help
-    if (lowerInput.includes('help') || lowerInput.includes('tips') || lowerInput.includes('advice')) {
-      return "I'm here to help you manage your security operations! I can track vulnerability assessments, incident responses, compliance tasks, and security reporting. Try asking me for 'updates', 'what needs attention', or 'create a security task'.";
-    }
-    
-    // Next steps suggestion
-    if (lowerInput.includes('next') || lowerInput.includes('what should')) {
-      const nextTask = tasks.find(t => t.status === 'pending' && t.priority === 'high') || 
-                      tasks.find(t => t.status === 'pending');
-      
-      if (nextTask) {
-        return `I recommend focusing on "${nextTask.title}" next. It's ${nextTask.priority} priority. ${nextTask.title.includes('SharePoint') ? 'This vulnerability needs immediate attention!' : 'Should I help you get started?'}`;
-      }
-      return "Your high-priority security tasks are in progress. Consider working on the status submission for your boss or checking for new security alerts.";
-    }
-    
-    return "I'm here to help you stay on top of your security operations! Ask me for updates, task priorities, or help creating new security tasks. What would you like to focus on?";
   };
 
   const extractTaskFromInput = (input: string): string | null => {
