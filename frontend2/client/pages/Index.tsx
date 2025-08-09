@@ -277,7 +277,7 @@ export default function Index() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 'query': lowerInput }),
+            body: JSON.stringify({ 'query_input': lowerInput }),
         });
 
         if (!response.ok) {

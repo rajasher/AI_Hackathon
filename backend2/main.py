@@ -31,7 +31,7 @@ ai_agent = AIAgent()
 
 # Request/Response models
 class QueryRequest(BaseModel):
-    query: str
+    query_input: str
     user_id: Optional[str] = None
     session_id: Optional[str] = None
 
@@ -71,15 +71,15 @@ async def process_query(request: QueryRequest):
     start_time = time.time()
     
     try:
-        logger.info(f"Processing query: {request.query[:100]}...")
+        logger.info(f"Processing query: {request.query_input[:100]}...")
         
         # Validate input
-        if not request.query or not request.query.strip():
+        if not request.query_input or not request.query_input.strip():
             raise HTTPException(status_code=400, detail="Query cannot be empty")
         
         # Process query through AI agent
         agent_response = await ai_agent.process_query(
-            query=request.query,
+            query=request.query_input,
             user_id=request.user_id,
             session_id=request.session_id
         )
@@ -90,7 +90,7 @@ async def process_query(request: QueryRequest):
         
         return QueryResponse(
             response=agent_response,
-            query=request.query,
+            query=request.query_input,
             user_id=request.user_id,
             session_id=request.session_id,
             processing_time=processing_time
@@ -100,29 +100,6 @@ async def process_query(request: QueryRequest):
         logger.error(f"Error processing query: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@app.post("/chat")
-async def chat_endpoint(request: QueryRequest):
-    """
-    Alternative chat endpoint with simplified response format
-    """
-    try:
-        logger.info(f"Processing chat message: {request.query[:100]}...")
-        
-        if not request.query or not request.query.strip():
-            raise HTTPException(status_code=400, detail="Message cannot be empty")
-        
-        # Process query through AI agent
-        response = await ai_agent.process_query(
-            query=request.query,
-            user_id=request.user_id,
-            session_id=request.session_id
-        )
-        
-        return {"message": response}
-        
-    except Exception as e:
-        logger.error(f"Error in chat endpoint: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
