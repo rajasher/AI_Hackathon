@@ -252,7 +252,62 @@ export default function Index() {
     const shouldSpeak = fromVoice || wasVoiceInput;
     setWasVoiceInput(false); // Reset after use
 
-    const responseContent = await generateAIResponse(messageContent);
+    const data = await generateAIResponse(messageContent);
+    let responseContent = "I received a response, but I'm not sure how to display it.";
+
+    if (data) {
+        let parsedData = data;
+        // Check if the main response is a stringified JSON and parse it.
+        if (data.response && typeof data.response === 'string') {
+            try {
+                parsedData = JSON.parse(data.response);
+            } catch (e) {
+                console.error("Failed to parse response JSON string:", e);
+                parsedData = null;
+            }
+        }
+
+        // Assuming parsedData has a 'tool_results' property which is an array.
+        if (parsedData && Array.isArray(parsedData.tool_results)) {
+            const response_parts: string[] = [];
+            response_parts.push("Based on your query, here's what I found: \n\n");
+
+            for (const result of parsedData.tool_results) {
+                if (result.tool === 'get_updates' && result.result) {
+                    const toolData = result.result;
+                    if (toolData.title) {
+                        response_parts.push(`**${toolData.title}**\n`);
+                        if(toolData.status) response_parts.push(`Status: ${toolData.status}\n`);
+                        if(toolData.priority) response_parts.push(`Priority: ${toolData.priority}\n`);
+
+                        if (Array.isArray(toolData.steps)) {
+                            response_parts.push("\n**Steps:**\n");
+                            for (const step of toolData.steps) {
+                                if(step.step) response_parts.push(`- **${step.step}**`);
+                                if(step.description) response_parts.push(`: ${step.description}\n`);
+                                else response_parts.push(`\n`);
+
+                                if(step.status) response_parts.push(`  Status: ${step.status}\n`);
+                                if (step.output) {
+                                    response_parts.push(`  Output: ${step.output}\n`);
+                                }
+                                response_parts.push("\n");
+                            }
+                        }
+                    } else {
+                        response_parts.push(`**Tool Result:**\n\`\`\`json\n${JSON.stringify(toolData, null, 2)}\n\`\`\`\n`);
+                    }
+                }
+            }
+            responseContent = response_parts.join('');
+        } else if (typeof data === 'string') { // Handle string error responses
+            responseContent = data;
+        } else if (data.response && typeof data.response === 'string') {
+            // Fallback to show the stringified JSON if parsing fails or it's not the expected structure
+            responseContent = data.response;
+        }
+    }
+
     const aiResponse: Message = {
       id: (Date.now() + 1).toString(),
       content: responseContent,
@@ -268,7 +323,7 @@ export default function Index() {
     }
   };
 
-  const generateAIResponse = async (userInput: string): Promise<string> => {
+  const generateAIResponse = async (userInput: string): Promise<any> => {
     const lowerInput = userInput.toLowerCase();
 
     try {
@@ -284,10 +339,8 @@ export default function Index() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        // Assuming the API returns a JSON object with the response text in a 'response' property.
-        // Adjust 'data.response' if the API returns a different structure.
-        return data.response;
+        return await response.json();
+
     } catch (error) {
         console.error('Error fetching AI response:', error);
         return "Sorry, I'm having trouble connecting to the server.";
@@ -1466,7 +1519,7 @@ export default function Index() {
                     </p>
                   </div>
                 </div>
-                
+
                 <Button className="w-full">Save Tech Stack Settings</Button>
               </div>
             </TabsContent>
