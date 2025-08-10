@@ -68,7 +68,7 @@ export default function Index() {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
-  const [viewingOutput, setViewingOutput] = useState<{taskId: string, subtaskId: string} | null>(null);
+  const [viewingTaskId, setViewingTaskId] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [activeTab, setActiveTab] = useState<'updates' | 'tasks' | 'chat'>('chat');
@@ -432,13 +432,8 @@ export default function Index() {
     setSimpleTasks(prev => prev.filter(task => task.id !== taskId));
   };
 
-  const viewOutput = (taskId: string, subtaskId: string) => {
-    console.log('Viewing output for:', taskId, subtaskId);
-    const task = tasks.find(t => t.id === taskId);
-    const subtask = task?.subtasks.find(st => st.id === subtaskId);
-    console.log('Found task:', task?.title);
-    console.log('Found subtask:', subtask?.title, 'Output:', subtask?.output);
-    setViewingOutput({ taskId, subtaskId });
+  const viewTaskDetails = (taskId: string) => {
+    setViewingTaskId(taskId);
   };
 
   const startVoiceInput = () => {
@@ -680,10 +675,19 @@ export default function Index() {
                             {task.title}
                           </h3>
                         </div>
-                        <div className="flex gap-1 shrink-0">
+                        <div className="flex gap-1 shrink-0 items-center">
                           <Badge variant="secondary" className={`text-xs px-1.5 py-0.5 ${getPriorityColor(task.priority)}`}>
                             {task.priority[0].toUpperCase()}
                           </Badge>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => viewTaskDetails(task.id)}
+                            className="h-5 w-5 p-0 text-muted-foreground hover:text-primary"
+                            title="View Details"
+                          >
+                            <Eye className="h-3 w-3" />
+                          </Button>
                         </div>
                       </div>
                       
@@ -706,21 +710,10 @@ export default function Index() {
                                 {getStatusIcon(subtask.status)}
                               </button>
                               <span className={`text-xs flex-1 ${
-                                subtask.status === 'completed' ? 'text-muted-foreground line-through' : 'text-foreground'
+                                subtask.status === 'completed' ? 'text-muted-foreground' : 'text-foreground'
                               }`}>
                                 {subtask.title}{subtask.description ? `: ${subtask.description}` : ''}
                               </span>
-                              {subtask.output && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => viewOutput(task.id, subtask.id)}
-                                  className="h-4 w-4 p-0 bg-primary/10 hover:bg-primary/20 border-primary/20"
-                                  title="View output"
-                                >
-                                  <Eye className="h-2.5 w-2.5 text-primary" />
-                                </Button>
-                              )}
                             </div>
                           ))}
                         </div>
@@ -988,38 +981,66 @@ export default function Index() {
       </div>
 
       {/* Output Viewing Modal */}
-      <Dialog open={!!viewingOutput} onOpenChange={() => setViewingOutput(null)}>
-        <DialogContent className="w-[95vw] max-w-none sm:max-w-2xl h-[90vh] sm:max-h-[80vh] overflow-y-auto mx-auto">
+      <Dialog open={!!viewingTaskId} onOpenChange={() => setViewingTaskId(null)}>
+        <DialogContent className="w-[95vw] max-w-none sm:max-w-3xl h-[90vh] sm:max-h-[80vh] flex flex-col mx-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Step Details
+              <ListTodo className="h-5 w-5" />
+              Update Details
             </DialogTitle>
           </DialogHeader>
-          {viewingOutput && (() => {
-            const task = tasks.find(t => t.id === viewingOutput.taskId);
-            const subtask = task?.subtasks.find(st => st.id === viewingOutput.subtaskId);
+          {viewingTaskId && (() => {
+            const task = tasks.find(t => t.id === viewingTaskId);
+            if (!task) return null;
+
             return (
-              <div className="space-y-4">
-                <div className="border-b pb-3">
-                  <div className="flex items-center gap-2 mb-1">
-                    {subtask && getStatusIcon(subtask.status)}
-                    <h3 className="font-medium text-foreground">{subtask?.title}</h3>
+              <div className="flex-1 overflow-y-auto pr-2 space-y-4">
+                {/* Main Task Details */}
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-foreground">{task.title}</h3>
+                  <p className="text-sm text-muted-foreground">{task.description}</p>
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">Status:</span>
+                      <span className="flex items-center gap-1 font-medium">
+                        {getStatusIcon(task.status)} {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">Priority:</span>
+                      <Badge variant="secondary" className={`text-xs ${getPriorityColor(task.priority)}`}>
+                        {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                      </Badge>
+                    </div>
                   </div>
-                  {subtask?.description && (
-                    <p className="text-sm text-muted-foreground pl-6">{subtask.description}</p>
-                  )}
                 </div>
 
-                <div className="prose prose-sm max-w-none">
-                  <Label className="text-xs uppercase text-muted-foreground">Output</Label>
-                  <div className="mt-1 bg-muted/50 p-3 rounded-lg border border-border min-h-[80px]">
-                    <div className="text-sm text-foreground">
-                      {subtask?.output ? (
-                        <pre className="whitespace-pre-wrap font-sans">{subtask.output}</pre>
-                      ) : (
-                        <p className="text-muted-foreground italic">No output available.</p>
-                      )}
+                {/* Subtasks Table */}
+                <div className="border-t pt-4">
+                  <h4 className="font-medium text-base mb-2">Subtasks</h4>
+                  <div className="border rounded-lg overflow-hidden">
+                    <div className="grid grid-cols-[auto_1fr_1fr_1fr_1fr] bg-muted/50 text-xs font-medium text-muted-foreground min-w-[600px]">
+                      <div className="p-2 border-b border-r">#</div>
+                      <div className="p-2 border-b border-r">Description</div>
+                      <div className="p-2 border-b border-r">Status</div>
+                      <div className="p-2 border-b">Output</div>
+                    </div>
+                    <div className="min-w-[600px]">
+                      {task.subtasks.map((subtask, index) => (
+                        <div key={subtask.id} className="grid grid-cols-[auto_1fr_1fr_1fr_1fr] text-xs items-start">
+                          <div className="p-2 border-r">{subtask.title}</div>
+                          <div className="p-2 border-r">{subtask.description || <span className="text-muted-foreground italic">N/A</span>}</div>
+                          <div className="p-2 border-r flex items-center gap-1.5">
+                            {getStatusIcon(subtask.status)}
+                            <span>{subtask.status.charAt(0).toUpperCase() + subtask.status.slice(1)}</span>
+                          </div>
+                          <div className="p-2">
+                            {subtask.output && (
+                              <pre className="whitespace-pre-wrap font-sans text-xs">{subtask.output}</pre>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
