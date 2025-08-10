@@ -37,7 +37,7 @@ class QueryRequest(BaseModel):
 
 class QueryResponse(BaseModel):
     response: str
-    query: str
+    query_input: str
     user_id: Optional[str] = None
     session_id: Optional[str] = None
     processing_time: float
@@ -90,7 +90,7 @@ async def process_query(request: QueryRequest):
         
         return QueryResponse(
             response=agent_response,
-            query=request.query_input,
+            query_input=request.query_input,
             user_id=request.user_id,
             session_id=request.session_id,
             processing_time=processing_time

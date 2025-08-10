@@ -5,6 +5,8 @@ import json
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+from tools import execute_tool
+
 # You can use different AI providers - uncomment the one you want to use:
 
 # Option 1: OpenAI
@@ -32,9 +34,28 @@ class AIAgent:
         self.api_key = os.getenv("AI_API_KEY")
         self.session_history: Dict[str, list] = {}
         self.client = None
+        self.agent_config = self._load_agent_config()
         
         # Initialize the selected AI provider
         self._initialize_provider()
+    
+    def _load_agent_config(self) -> Dict[str, Any]:
+        """Load agent configuration from JSON file"""
+        try:
+            config_path = os.path.join(os.path.dirname(__file__), "mainagent_config.json")
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+            logger.info("Agent configuration loaded successfully")
+            return config
+        except Exception as e:
+            logger.warning(f"Failed to load agent config: {e}")
+            # Fallback configuration
+            return {
+                "system_role": "You are a helpful AI assistant.",
+                "context": "Assist users with their queries.",
+                "instructions": ["Be helpful and informative"],
+                "tools": []
+            }
     
     def _initialize_provider(self):
         """Initialize the selected AI provider"""
@@ -42,8 +63,15 @@ class AIAgent:
             if self.provider == "openai":
                 if not self.api_key:
                     raise ValueError("OpenAI API key not found. Set AI_API_KEY environment variable.")
-                self.client = openai.OpenAI(base_url="https://api.rdsec.trendmicro.com/prod/aiendpoint/v1/", api_key=self.api_key)
-                logger.info("OpenAI provider initialized")
+                
+                # Initialize client with tools if available
+                tools = self.agent_config.get("tools", [])
+                self.client = openai.OpenAI(
+                    base_url="https://api.rdsec.trendmicro.com/prod/aiendpoint/v1/", 
+                    api_key=self.api_key
+                )
+                self.tools = tools
+                logger.info(f"OpenAI provider initialized with {len(tools)} tools")
                 
             elif self.provider == "anthropic":
                 if not self.api_key:
@@ -134,29 +162,86 @@ class AIAgent:
             self.session_history[session_id] = self.session_history[session_id][-10:]
     
     async def _process_openai(self, query: str, context: list) -> str:
-        """Process query using OpenAI API"""
+        """Process query using OpenAI API with tools - optimized single call approach"""
         try:
-            # Uncomment and modify when using OpenAI
-            messages = [{"role": "system", "content": "You are a helpful AI assistant."}]
-            # 
+            # Build system message from configuration
+            system_content = f"{self.agent_config['system_role']}\n\nContext: {self.agent_config['context']}\n\nInstructions:\n"
+            for instruction in self.agent_config['instructions']:
+                system_content += f"- {instruction}\n"
+            
+            messages = [{"role": "system", "content": system_content}]
+            
             # Add conversation context
             for item in context[-5:]:  # Last 5 exchanges
                 messages.append({"role": "user", "content": item["query"]})
                 messages.append({"role": "assistant", "content": item["response"]})
              
             messages.append({"role": "user", "content": query})
-            # 
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                max_tokens=1000,
-                temperature=0.7
-            )
             
-            return response.choices[0].message.content
+            # Single API call with function calling
+            completion_args = {
+                "model": self.model,
+                "messages": messages,
+                "max_tokens": 1000,
+                "temperature": 0.7
+            }
             
+            # Add tools if available
+            if self.tools:
+                completion_args["tools"] = self.tools
+                completion_args["tool_choice"] = "auto"
+            
+            response = self.client.chat.completions.create(**completion_args)
+            message = response.choices[0].message
+            
+            # If no tool calls, return structured JSON with AI response only
+            if not hasattr(message, 'tool_calls') or not message.tool_calls:
+                response_data = {
+                    "query": query,
+                    "response_type": "ai_only",
+                    "ai_response": message.content,
+                    "tools_used": 0,
+                    "tool_results": [],
+                    "summary": {
+                        "total_tools_executed": 0,
+                        "tools_executed": []
+                    }
+                }
+                return json.dumps(response_data, indent=2)
+            
+            # Handle tool calls and generate response in a single call
+            tool_results = []
+            for tool_call in message.tool_calls:
+                tool_name = tool_call.function.name
+                tool_args = json.loads(tool_call.function.arguments)
+                
+                logger.info(f"Executing tool: {tool_name} with args: {tool_args}")
+                
+                # Execute the tool
+                tool_result = execute_tool(tool_name, **tool_args)
+                tool_results.append({
+                    "tool": tool_name,
+                    "result": tool_result
+                })
+            
+            # Return structured JSON response with tool results
+            # This gives the caller flexibility to use the data as they wish
+            response_data = {
+                "query": query,
+                "response_type": "tool_enhanced",
+                "ai_response": message.content if hasattr(message, 'content') else None,
+                "tools_used": len(tool_results),
+                "tool_results": tool_results,
+                "summary": {
+                    "total_tools_executed": len(tool_results),
+                    "tools_executed": [result['tool'] for result in tool_results]
+                }
+            }
+            
+            return json.dumps(response_data, indent=2)
             
         except Exception as e:
+            logger.error(f"OpenAI API error: {str(e)}")
             raise Exception(f"OpenAI API error: {str(e)}")
     
     async def _process_anthropic(self, query: str, context: list) -> str:
