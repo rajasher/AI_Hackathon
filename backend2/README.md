@@ -6,6 +6,8 @@ A Python FastAPI backend that receives user queries, processes them through an A
 
 - **FastAPI-based REST API** with automatic OpenAPI documentation
 - **Multiple AI Provider Support**: OpenAI, Anthropic Claude, Google Gemini, Ollama, or Mock responses
+- **Tool Integration**: OpenAI agent with `get_updates` tool for real-time information
+- **Configurable Agent**: Role, context, and instructions loaded from configuration file
 - **Session Management**: Maintains conversation history for continuity
 - **CORS Support**: Ready for frontend integration
 - **Health Check Endpoints**: Monitor API status
@@ -77,7 +79,7 @@ The API will be available at `http://localhost:8000`
 curl -X POST "http://localhost:8000/query" \
   -H "Content-Type: application/json" \
   -d '{
-    "query": "Hello, how can you help me today?"
+    "query_input": "Hello, how can you help me today?"
   }'
 ```
 
@@ -87,19 +89,19 @@ curl -X POST "http://localhost:8000/query" \
 curl -X POST "http://localhost:8000/query" \
   -H "Content-Type: application/json" \
   -d '{
-    "query": "What is machine learning?",
+    "query_input": "What is machine learning?",
     "user_id": "user123",
     "session_id": "session456"
   }'
 ```
 
-### Chat Endpoint
+### Query that triggers get_updates tool
 
 ```bash
-curl -X POST "http://localhost:8000/chat" \
+curl -X POST "http://localhost:8000/query" \
   -H "Content-Type: application/json" \
   -d '{
-    "query": "Explain quantum computing",
+    "query_input": "What is the current weather?",
     "session_id": "session789"
   }'
 ```
@@ -109,7 +111,7 @@ curl -X POST "http://localhost:8000/chat" \
 ### Query Request
 ```json
 {
-  "query": "Your question here",
+  "query_input": "Your question here",
   "user_id": "optional_user_id",
   "session_id": "optional_session_id"
 }
@@ -119,7 +121,7 @@ curl -X POST "http://localhost:8000/chat" \
 ```json
 {
   "response": "AI agent's response",
-  "query": "Original user query",
+  "query_input": "Original user query",
   "user_id": "user_id",
   "session_id": "session_id",
   "processing_time": 1.23
@@ -193,9 +195,13 @@ pytest
 backend2/
 ├── main.py              # FastAPI application and endpoints
 ├── ai_agent.py          # AI agent service with provider integrations
+├── tools.py             # Tool implementations (get_updates, etc.)
+├── agent_config.json    # Agent configuration (role, context, instructions, tools)
 ├── requirements.txt     # Python dependencies
-├── README.md           # This file
-└── .env                # Environment variables (create this)
+├── test_api.py         # Unit tests for the API
+├── example_usage.py    # Example usage demonstrations
+├── env.example         # Environment variables template
+└── README.md           # This file
 ```
 
 ## Environment Variables
