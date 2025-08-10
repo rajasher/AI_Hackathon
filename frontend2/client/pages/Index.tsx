@@ -32,6 +32,7 @@ interface SubTask {
   title: string;
   status: 'pending' | 'in-progress' | 'completed';
   output?: string;
+  description?: string;
   completedAt?: Date;
 }
 
@@ -62,114 +63,8 @@ export default function Index() {
     }
   ]);
   
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: '1',
-      title: 'SharePoint vulnerability',
-      description: 'Critical SharePoint vulnerability assessment and remediation',
-      status: 'in-progress',
-      priority: 'high',
-      createdAt: new Date(),
-      subtasks: [
-        {
-          id: '1-1',
-          title: 'News source',
-          status: 'completed',
-          output: 'CVE-2024-21413 identified in SharePoint Server 2019/2016. Critical RCE vulnerability with CVSS 9.8. Microsoft advisory MS24-Feb released. Active exploitation detected in the wild by multiple threat intelligence sources.',
-          completedAt: new Date(Date.now() - 86400000)
-        },
-        {
-          id: '1-2',
-          title: 'Check Vision One for any servers',
-          status: 'completed',
-          output: 'Trend Micro Vision One scan completed. Found 12 SharePoint servers in environment: 8 SharePoint 2019 instances (3 critical, 5 production), 4 SharePoint 2016 instances (2 legacy, 2 dev). All servers identified as vulnerable. Priority patching required.',
-          completedAt: new Date(Date.now() - 43200000)
-        },
-        {
-          id: '1-3',
-          title: 'Check traces of exploitability',
-          status: 'in-progress'
-        },
-        {
-          id: '1-4',
-          title: 'Provide impact',
-          status: 'pending'
-        },
-        {
-          id: '1-5',
-          title: 'Contact asset owner',
-          status: 'pending'
-        },
-        {
-          id: '1-6',
-          title: 'Update status',
-          status: 'pending'
-        },
-        {
-          id: '1-7',
-          title: 'Remaining tasks',
-          status: 'pending'
-        }
-      ]
-    },
-    {
-      id: '2',
-      title: 'Status submission for boss',
-      description: 'Weekly security status report compilation and submission',
-      status: 'pending',
-      priority: 'medium',
-      createdAt: new Date(),
-      subtasks: [
-        {
-          id: '2-1',
-          title: 'Source showing email',
-          status: 'pending'
-        },
-        {
-          id: '2-2',
-          title: 'Report creation',
-          status: 'pending'
-        },
-        {
-          id: '2-3',
-          title: 'Interpret insights',
-          status: 'pending'
-        }
-      ]
-    },
-    {
-      id: '3',
-      title: 'Security incident response',
-      description: 'Handle ongoing security incidents and alerts',
-      status: 'completed',
-      priority: 'high',
-      createdAt: new Date(),
-      subtasks: [
-        {
-          id: '3-1',
-          title: 'Triage security alerts',
-          status: 'completed',
-          output: 'Processed 47 security alerts from SIEM. 12 false positives, 28 low priority, 6 medium priority, 1 high priority (phishing attempt). High priority alert escalated to incident response team.',
-          completedAt: new Date(Date.now() - 172800000)
-        },
-        {
-          id: '3-2',
-          title: 'Investigate phishing incident',
-          status: 'completed',
-          output: 'Phishing email targeted 15 employees. 2 users clicked malicious link, 0 credentials compromised. Blocked sender domain, updated email filters, conducted user awareness training.',
-          completedAt: new Date(Date.now() - 86400000)
-        },
-        {
-          id: '3-3',
-          title: 'Document lessons learned',
-          status: 'completed',
-          output: 'Created incident report IR-2024-003. Updated playbook with new phishing indicators. Recommended additional email security controls and quarterly phishing simulations.',
-          completedAt: new Date(Date.now() - 43200000)
-        }
-      ]
-    }
-  ]);
-  
+  const [tasks, setTasks] = useState<Task[]>([]);
+
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
@@ -228,6 +123,12 @@ export default function Index() {
     setIsSpeaking(true);
     window.speechSynthesis.speak(utterance);
   };
+
+  useEffect(() => {
+    if (activeTab === 'updates') {
+      fetchUpdates();
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     scrollToBottom();
@@ -320,6 +221,65 @@ export default function Index() {
     // Speak the response if it was voice input
     if (shouldSpeak) {
       setTimeout(() => speakText(responseContent), 500); // Small delay for better UX
+    }
+  };
+
+  const fetchUpdates = async () => {
+    console.log("1. [fetchUpdates] Starting...");
+    const data = await generateAIResponse("get daily updates");
+    console.log("2. [fetchUpdates] Received data from API:", JSON.stringify(data, null, 2));
+
+    if (data) {
+      let parsedData = data;
+      if (data.response && typeof data.response === 'string') {
+        try {
+          parsedData = JSON.parse(data.response);
+          console.log("3. [fetchUpdates] Parsed nested JSON string:", parsedData);
+        } catch (e) {
+          console.error("[fetchUpdates] Failed to parse response JSON string:", e);
+          parsedData = null;
+        }
+      }
+
+      if (parsedData && Array.isArray(parsedData.tool_results)) {
+        console.log("4. [fetchUpdates] Found tool_results array. Processing...", parsedData.tool_results);
+        const newTasks: Task[] = parsedData.tool_results
+          .filter(result => result.tool === 'get_updates' && result.result)
+          .map((result, index) => {
+            console.log(`5. [fetchUpdates] Mapping result ${index}:`, result);
+            const toolData = result.result;
+            const subtasks: SubTask[] = (toolData.steps || []).map((step, subIndex) => {
+              const status = step.status ? step.status.toLowerCase() : 'pending';
+              return {
+                id: `${Date.now()}-${index}-${subIndex}`,
+                title: step.step || `Step ${subIndex + 1}`,
+                status: status === 'completed' ? 'completed' : status === 'in-progress' ? 'in-progress' : 'pending',
+                output: step.output,
+                description: step.description,
+                completedAt: status === 'completed' ? new Date() : undefined,
+              };
+            });
+
+            const priority = toolData.priority ? toolData.priority.toLowerCase() : 'medium';
+            const status = toolData.status ? toolData.status.toLowerCase() : 'pending';
+
+            return {
+              id: `${Date.now()}-${index}`,
+              title: toolData.title || 'Untitled Task',
+              description: toolData.description || 'No description provided.',
+              status: status === 'completed' ? 'completed' : status === 'in-progress' ? 'in-progress' : 'pending',
+              priority: priority === 'high' ? 'high' : priority === 'low' ? 'low' : 'medium',
+              createdAt: new Date(),
+              subtasks: subtasks,
+            };
+          });
+        console.log("6. [fetchUpdates] Mapped to newTasks array:", newTasks);
+        setTasks(newTasks);
+      } else {
+        console.log("4a. [fetchUpdates] Condition failed: `parsedData && Array.isArray(parsedData.tool_results)` was false. No tasks will be set.", { parsedData });
+      }
+    } else {
+      console.log("2a. [fetchUpdates] Data from generateAIResponse is falsy.");
     }
   };
 
@@ -527,7 +487,7 @@ export default function Index() {
     recognition.start();
   };
 
-  const getStatusIcon = (status: Task['status']) => {
+  const getStatusIcon = (status: Task['status'] | SubTask['status']) => {
     switch (status) {
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-task-completed" />;
@@ -549,17 +509,20 @@ export default function Index() {
     }
   };
 
-  const getFilteredTasks = () => {
+  console.log("[Render] Component is rendering. Current tasks state:", tasks);
+  const filteredTasks = (() => {
+    if (activeTab === 'updates') {
+      return tasks;
+    }
+
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
     const weekStart = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
 
     return tasks.filter(task => {
-      // Check if task has any activity in the selected timeframe
       const hasRecentSubtaskActivity = task.subtasks.some(subtask => {
         if (!subtask.completedAt) return false;
-
         const completedDate = new Date(subtask.completedAt);
         switch (updatesFilter) {
           case 'today':
@@ -573,7 +536,6 @@ export default function Index() {
         }
       });
 
-      // Also include tasks created in the timeframe
       const taskCreatedDate = new Date(task.createdAt);
       const isRecentTask = (() => {
         switch (updatesFilter) {
@@ -590,7 +552,7 @@ export default function Index() {
 
       return hasRecentSubtaskActivity || isRecentTask;
     });
-  };
+  })();
 
   return (
     <div className="h-screen bg-background flex justify-center">
@@ -672,14 +634,14 @@ export default function Index() {
                 </div>
 
                 <p className="text-xs text-muted-foreground">
-                  {updatesFilter === 'today' && `${getFilteredTasks().filter(t => t.status === 'completed').length} of ${getFilteredTasks().length} updates today`}
-                  {updatesFilter === 'yesterday' && `${getFilteredTasks().filter(t => t.status === 'completed').length} of ${getFilteredTasks().length} updates yesterday`}
-                  {updatesFilter === 'week' && `${getFilteredTasks().filter(t => t.status === 'completed').length} of ${getFilteredTasks().length} updates this week`}
+                  {updatesFilter === 'today' && `${filteredTasks.filter(t => t.status === 'completed').length} of ${filteredTasks.length} updates today`}
+                  {updatesFilter === 'yesterday' && `${filteredTasks.filter(t => t.status === 'completed').length} of ${filteredTasks.length} updates yesterday`}
+                  {updatesFilter === 'week' && `${filteredTasks.filter(t => t.status === 'completed').length} of ${filteredTasks.length} updates this week`}
                 </p>
               </div>
               
               <div className="flex-1 overflow-y-auto p-3 space-y-3">
-                {getFilteredTasks().length === 0 ? (
+                {filteredTasks.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center py-8">
                     <ListTodo className="h-12 w-12 text-muted-foreground/50 mb-4" />
                     <h3 className="text-sm font-medium text-muted-foreground mb-2">No Updates</h3>
@@ -690,7 +652,7 @@ export default function Index() {
                     </p>
                   </div>
                 ) : (
-                  getFilteredTasks().map((task) => (
+                  filteredTasks.map((task) => (
                     <Card key={task.id} className="bg-card border-border hover:bg-accent/50 transition-colors">
                     <CardContent className="p-3">
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -746,7 +708,7 @@ export default function Index() {
                               <span className={`text-xs flex-1 ${
                                 subtask.status === 'completed' ? 'text-muted-foreground line-through' : 'text-foreground'
                               }`}>
-                                {subtask.title}
+                                {subtask.title}{subtask.description ? `: ${subtask.description}` : ''}
                               </span>
                               {subtask.output && (
                                 <Button
@@ -1031,7 +993,7 @@ export default function Index() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              Subtask Output
+              Step Details
             </DialogTitle>
           </DialogHeader>
           {viewingOutput && (() => {
@@ -1040,29 +1002,23 @@ export default function Index() {
             return (
               <div className="space-y-4">
                 <div className="border-b pb-3">
-                  <h3 className="font-medium text-foreground">{task?.title}</h3>
-                  <p className="text-sm text-muted-foreground">{subtask?.title}</p>
-                  {subtask?.completedAt && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Completed: {subtask.completedAt.toLocaleString()}
-                    </p>
+                  <div className="flex items-center gap-2 mb-1">
+                    {subtask && getStatusIcon(subtask.status)}
+                    <h3 className="font-medium text-foreground">{subtask?.title}</h3>
+                  </div>
+                  {subtask?.description && (
+                    <p className="text-sm text-muted-foreground pl-6">{subtask.description}</p>
                   )}
                 </div>
+
                 <div className="prose prose-sm max-w-none">
-                  <div className="bg-muted/50 p-4 rounded-lg border border-border">
-                    <div className="text-sm text-foreground space-y-3">
+                  <Label className="text-xs uppercase text-muted-foreground">Output</Label>
+                  <div className="mt-1 bg-muted/50 p-3 rounded-lg border border-border min-h-[80px]">
+                    <div className="text-sm text-foreground">
                       {subtask?.output ? (
-                        subtask.output.split(/\n\s*\n/).map((paragraph, index) => (
-                          <div key={index} className="leading-relaxed">
-                            {paragraph.split(/\n/).map((line, lineIndex) => (
-                              <div key={lineIndex} className="mb-1">
-                                {line.trim()}
-                              </div>
-                            ))}
-                          </div>
-                        ))
+                        <pre className="whitespace-pre-wrap font-sans">{subtask.output}</pre>
                       ) : (
-                        <p className="text-muted-foreground italic">No output available</p>
+                        <p className="text-muted-foreground italic">No output available.</p>
                       )}
                     </div>
                   </div>
@@ -1547,21 +1503,21 @@ export default function Index() {
                         <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-2">
                           <Bot className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-xs">Professional</span>
+                        <span className="text-xs font-medium">Professional</span>
                         <span className="text-xs text-muted-foreground">Available</span>
                       </div>
                       <div className="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-accent">
                         <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-2">
                           <Bot className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-xs">Friendly</span>
+                        <span className="text-xs font-medium">Friendly</span>
                         <span className="text-xs text-muted-foreground">Available</span>
                       </div>
                       <div className="flex flex-col items-center p-3 border rounded-lg cursor-pointer hover:bg-accent">
                         <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-2">
                           <Bot className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-xs">Casual</span>
+                        <span className="text-xs font-medium">Casual</span>
                         <span className="text-xs text-muted-foreground">Available</span>
                       </div>
                     </div>
