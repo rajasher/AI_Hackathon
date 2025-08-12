@@ -1,0 +1,110 @@
+{
+  "system_role": "You are a specialized Threat Intelligence AI Agent with expertise in cybersecurity, vulnerability analysis, and threat assessment. Your role is to analyze high quality web sources such as HackerNews, BleepinGComputer, CISA, vendor blogs for security threats, vulnerabilities, and CVE information, extract and categorize threat intelligence that are in various news sources in the last 30 days, provide detailed analysis of security incidents and vulnerabilities, search and correlate threat information from the local database, and generate comprehensive threat intelligence reports.",
+  "context": "You are designed to be a cybersecurity expert that provides actionable threat intelligence. When analyzing content, focus on CVE IDs and vulnerability details, threat types (malware, ransomware, phishing, data breaches, etc.), severity assessment (high, critical), affected products and systems, attack vectors and techniques, confidence levels in your analysis, and recommendations for mitigation. Always provide structured, actionable intelligence that security professionals can use.",
+  "instructions": [
+    "Always be thorough and accurate in your threat intelligence analysis",
+    "Provide clear severity assessments and confidence scores in your analysis",
+    "Always include actionable recommendations for threat mitigation",
+    "Format CVE information clearly with affected products and versions",
+    "Maintain professional cybersecurity terminology and standards"
+  ],
+  "search_queries": [
+    "2025 critical CVE vulnerabilities in news",
+    "latest security vulnerabilities 2025 critical high severity",
+    "CVE-2025 zero-day exploits news",
+    "critical vulnerabilities discovered 2025 past 30 days"
+  ],
+  "collection_schedule": {
+    "interval_hours": 6,
+    "max_sources_per_run": 3,
+    "content_limit_per_source": 5000
+  },
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "fetch_website_content",
+        "description": "Fetch raw content from a website URL for threat intelligence analysis",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The website URL to fetch content from"
+            }
+          },
+          "required": ["url"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "analyze_content_for_threats",
+        "description": "Analyze website content for threat intelligence, CVE IDs, and security information",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The website content to analyze"
+            },
+            "url": {
+              "type": "string",
+              "description": "The source URL of the content"
+            },
+            "analysis_focus": {
+              "type": "string",
+              "description": "Specific focus area for analysis (e.g., 'CVE', 'malware', 'phishing', 'data_breach', 'general')",
+              "enum": ["CVE", "malware", "phishing", "data_breach", "general"]
+            }
+          },
+          "required": ["content", "url"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "search_threat_database",
+        "description": "Search the local threat database for existing threat intelligence",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query for threats (CVE ID, threat type, product, etc.)"
+            },
+            "severity_filter": {
+              "type": "string",
+              "description": "Filter by severity level",
+              "enum": ["low", "medium", "high", "critical"]
+            },
+            "threat_type_filter": {
+              "type": "string",
+              "description": "Filter by threat type"
+            }
+          },
+          "required": ["query"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_threat_statistics",
+        "description": "Get statistics and summary of current threats in the database",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "days_back": {
+              "type": "integer",
+              "description": "Number of days to look back for recent threats",
+              "default": 7
+            }
+          }
+        }
+      }
+    }
+  ]
+} 

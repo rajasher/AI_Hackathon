@@ -1,0 +1,610 @@
+{
+  "collection_timestamp": "2025-08-12T17:21:38.071698",
+  "collection_results": {
+    "status": "success",
+    "collection_time": "2025-08-12T17:21:38.071536",
+    "total_cves_processed": 30,
+    "critical_cves_found": 20,
+    "top_20_critical_cves": [
+      {
+        "cve_id": "CVE-2025-8088",
+        "title": "KEV Critical: RARLAB WinRAR Path Traversal Vulnerability",
+        "description": "RARLAB WinRAR: RARLAB WinRAR contains a path traversal vulnerability affecting the Windows version of WinRAR. This vulnerability could allow an attacker to execute arbitrary code by crafting malicious archive files.",
+        "cvss_score": 9.5,
+        "published_date": "2025-08-12",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "RARLAB",
+        "product": "WinRAR",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2007-0671",
+        "title": "KEV Critical: Microsoft Office Excel Remote Code Execution Vulnerability",
+        "description": "Microsoft Office: Microsoft Office Excel contains a remote code execution vulnerability that can be exploited when a specially crafted Excel file is opened. This malicious file could be delivered as an email attachment or hosted on a malicious website. An attacker could leverage this vulnerability by creating a specially crafted Excel file, which, when opened, allowing an attacker to execute remote code on the affected system.",
+        "cvss_score": 9.5,
+        "published_date": "2025-08-12",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Microsoft",
+        "product": "Office",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2013-3893",
+        "title": "KEV Critical: Microsoft Internet Explorer Resource Management Errors Vulnerability",
+        "description": "Microsoft Internet Explorer: Microsoft Internet Explorer contains a memory corruption vulnerability that allows for remote code execution. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+        "cvss_score": 9.5,
+        "published_date": "2025-08-12",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Microsoft",
+        "product": "Internet Explorer",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2020-25078",
+        "title": "KEV Critical: D-Link DCS-2530L and DCS-2670L Devices Unspecified Vulnerability",
+        "description": "D-Link DCS-2530L and DCS-2670L Devices: D-Link DCS-2530L and DCS-2670L devices contains an unspecified vulnerability that could allow for remote administrator password disclosure. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+        "cvss_score": 9.5,
+        "published_date": "2025-08-05",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "D-Link",
+        "product": "DCS-2530L and DCS-2670L Devices",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2020-25079",
+        "title": "KEV Critical: D-Link DCS-2530L and DCS-2670L Command Injection Vulnerability",
+        "description": "D-Link DCS-2530L and DCS-2670L Devices: D-Link DCS-2530L and DCS-2670L devices contains a command injection vulnerability in the cgi-bin/ddns_enc.cgi. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+        "cvss_score": 9.5,
+        "published_date": "2025-08-05",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "D-Link",
+        "product": "DCS-2530L and DCS-2670L Devices",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2022-40799",
+        "title": "KEV Critical: D-Link DNR-322L Download of Code Without Integrity Check Vulnerability",
+        "description": "D-Link DNR-322L: D-Link DNR-322L contains a download of code without integrity check vulnerability that could allow an authenticated attacker to execute OS level commands on the device. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+        "cvss_score": 9.5,
+        "published_date": "2025-08-05",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "D-Link",
+        "product": "DNR-322L",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2023-2533",
+        "title": "KEV Critical: PaperCut NG/MF Cross-Site Request Forgery (CSRF) Vulnerability",
+        "description": "PaperCut NG/MF: PaperCut NG/MF contains a cross-site request forgery (CSRF) vulnerability, which, under specific conditions, could potentially enable an attacker to alter security settings or execute arbitrary code. ",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-28",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "PaperCut",
+        "product": "NG/MF",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-20337",
+        "title": "KEV Critical: Cisco Identity Services Engine Injection Vulnerability",
+        "description": "Cisco Identity Services Engine: Cisco Identity Services Engine contains an injection vulnerability in a specific API of Cisco ISE and Cisco ISE-PIC due to insufficient validation of user-supplied input allowing an attacker to exploit this vulnerability by submitting a crafted API request. Successful exploitation could allow an attacker to perform remote code execution and obtaining root privileges on an affected device.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-28",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Cisco",
+        "product": "Identity Services Engine",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-20281",
+        "title": "KEV Critical: Cisco Identity Services Engine Injection Vulnerability",
+        "description": "Cisco Identity Services Engine: Cisco Identity Services Engine contains an injection vulnerability in a specific API of Cisco ISE and Cisco ISE-PIC due to insufficient validation of user-supplied input allowing an attacker to exploit this vulnerability by submitting a crafted API request. Successful exploitation could allow an attacker to perform remote code execution and obtaining root privileges on an affected device.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-28",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Cisco",
+        "product": "Identity Services Engine",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-2775",
+        "title": "KEV Critical: SysAid On-Prem Improper Restriction of XML External Entity Reference Vulnerability",
+        "description": "SysAid SysAid On-Prem: SysAid On-Prem contains an improper restriction of XML external entity reference vulnerability in the Checkin processing functionality, allowing for administrator account takeover and file read primitives.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-22",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "SysAid",
+        "product": "SysAid On-Prem",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-2776",
+        "title": "KEV Critical: SysAid On-Prem Improper Restriction of XML External Entity Reference Vulnerability",
+        "description": "SysAid SysAid On-Prem: SysAid On-Prem contains an improper restriction of XML external entity reference vulnerability in the Server URL processing functionality, allowing for administrator account takeover and file read primitives.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-22",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "SysAid",
+        "product": "SysAid On-Prem",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-6558",
+        "title": "KEV Critical: Google Chromium ANGLE and GPU Improper Input Validation Vulnerability",
+        "description": "Google Chromium: Google Chromium contains an improper input validation vulnerability in ANGLE and GPU. This vulnerability could allow a remote attacker to potentially perform a sandbox escape via a crafted HTML page. This vulnerability could affect multiple web browsers that utilize Chromium, including, but not limited to, Google Chrome, Microsoft Edge, and Opera.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-22",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Google",
+        "product": "Chromium",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-54309",
+        "title": "KEV Critical:  CrushFTP Unprotected Alternate Channel Vulnerability",
+        "description": "CrushFTP CrushFTP: CrushFTP contains an unprotected alternate channel vulnerability. When the DMZ proxy feature is not used, mishandles AS2 validation and consequently allows remote attackers to obtain admin access via HTTPS.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-22",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "CrushFTP",
+        "product": "CrushFTP",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-49704",
+        "title": "KEV Critical: Microsoft SharePoint Code Injection Vulnerability",
+        "description": "Microsoft SharePoint: Microsoft SharePoint contains a code injection vulnerability that could allow an authorized attacker to execute code over a network. This vulnerability could be chained with CVE-2025-49706. CVE-2025-53770 is a patch bypass for CVE-2025-49704, and the updates for CVE-2025-53770 include more robust protection than those for CVE-2025-49704.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-22",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Microsoft",
+        "product": "SharePoint",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-49706",
+        "title": "KEV Critical: Microsoft SharePoint Improper Authentication Vulnerability",
+        "description": "Microsoft SharePoint: Microsoft SharePoint contains an improper authentication vulnerability that allows an authorized attacker to perform spoofing over a network. Successfully exploitation could allow an attacker to view sensitive information and make some changes to disclosed information. This vulnerability could be chained with CVE-2025-49704. CVE-2025-53771 is a patch bypass for CVE-2025-49706, and the updates for CVE-2025-53771 include more robust protection than those for CVE-2025-49706.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-22",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Microsoft",
+        "product": "SharePoint",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-53770",
+        "title": "KEV Critical: Microsoft SharePoint Deserialization of Untrusted Data Vulnerability",
+        "description": "Microsoft SharePoint: Microsoft SharePoint Server on-premises contains a deserialization of untrusted data vulnerability that could allow an unauthorized attacker to execute code over a network. This vulnerability could be chained with CVE-2025-53771. CVE-2025-53770 is a patch bypass for CVE-2025-49704, and the updates for CVE-2025-53770 include more robust protection than those for CVE-2025-49704.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-20",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Microsoft",
+        "product": "SharePoint",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-25257",
+        "title": "KEV Critical: Fortinet FortiWeb SQL Injection Vulnerability",
+        "description": "Fortinet FortiWeb: Fortinet FortiWeb contains a SQL injection vulnerability that may allow an unauthenticated attacker to execute unauthorized SQL code or commands via crafted HTTP or HTTPs requests.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-18",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Fortinet",
+        "product": "FortiWeb",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-47812",
+        "title": "KEV Critical: Wing FTP Server Improper Neutralization of Null Byte or NUL Character Vulnerability",
+        "description": "Wing FTP Server Wing FTP Server: Wing FTP Server contains an improper neutralization of null byte or NUL character vulnerability that can allow injection of arbitrary Lua code into user session files. This can be used to execute arbitrary system commands with the privileges of the FTP service (root or SYSTEM by default).",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-14",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Wing FTP Server",
+        "product": "Wing FTP Server",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2025-5777",
+        "title": "KEV Critical: Citrix NetScaler ADC and Gateway Out-of-Bounds Read Vulnerability",
+        "description": "Citrix NetScaler ADC and Gateway: Citrix NetScaler ADC and Gateway contain an out-of-bounds read vulnerability due to insufficient input validation. This vulnerability can lead to memory overread when the NetScaler is configured as a Gateway (VPN virtual server, ICA Proxy, CVPN, RDP Proxy) OR AAA virtual server.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-10",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Citrix",
+        "product": "NetScaler ADC and Gateway",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      },
+      {
+        "cve_id": "CVE-2019-9621",
+        "title": "KEV Critical: Synacor Zimbra Collaboration Suite (ZCS) Server-Side Request Forgery (SSRF) Vulnerability",
+        "description": "Synacor Zimbra Collaboration Suite (ZCS): Synacor Zimbra Collaboration Suite (ZCS) contains a server-side request forgery (SSRF) vulnerability via the ProxyServlet component.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-07",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Synacor",
+        "product": "Zimbra Collaboration Suite (ZCS)",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "in_news": true
+      }
+    ],
+    "sources_processed": 2,
+    "threats_found": 20,
+    "threats_stored": 20,
+    "processed_sources": [
+      {
+        "url": "https://services.nvd.nist.gov/rest/json/cves/2.0",
+        "source": "NIST NVD",
+        "threats_found": 0
+      },
+      {
+        "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+        "source": "CISA KEV",
+        "threats_found": 30
+      }
+    ],
+    "criteria": {
+      "cvss_score_threshold": 9.7,
+      "time_period": "2025-07-20 (single day)",
+      "sources": [
+        "NIST NVD",
+        "CISA KEV"
+      ],
+      "additional_filters": [
+        "Known exploits",
+        "In news"
+      ]
+    }
+  },
+  "database_stats": {
+    "total_threats": 20,
+    "severity_distribution": {
+      "critical": 20
+    },
+    "threat_type_distribution": {
+      "vulnerability": 20
+    },
+    "last_updated": "2025-08-12 17:21:38.071535"
+  },
+  "threats": [
+    {
+      "id": "threat_1755037298_3638",
+      "title": "KEV Critical: RARLAB WinRAR Path Traversal Vulnerability",
+      "description": "RARLAB WinRAR: RARLAB WinRAR contains a path traversal vulnerability affecting the Windows version of WinRAR. This vulnerability could allow an attacker to execute arbitrary code by crafting malicious archive files.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-8088"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071424",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_3233",
+      "title": "KEV Critical: Microsoft Office Excel Remote Code Execution Vulnerability",
+      "description": "Microsoft Office: Microsoft Office Excel contains a remote code execution vulnerability that can be exploited when a specially crafted Excel file is opened. This malicious file could be delivered as an email attachment or hosted on a malicious website. An attacker could leverage this vulnerability by creating a specially crafted Excel file, which, when opened, allowing an attacker to execute remote code on the affected system.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2007-0671"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071446",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_8052",
+      "title": "KEV Critical: Microsoft Internet Explorer Resource Management Errors Vulnerability",
+      "description": "Microsoft Internet Explorer: Microsoft Internet Explorer contains a memory corruption vulnerability that allows for remote code execution. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2013-3893"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071456",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_8757",
+      "title": "KEV Critical: D-Link DCS-2530L and DCS-2670L Devices Unspecified Vulnerability",
+      "description": "D-Link DCS-2530L and DCS-2670L Devices: D-Link DCS-2530L and DCS-2670L devices contains an unspecified vulnerability that could allow for remote administrator password disclosure. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2020-25078"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071464",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_6700",
+      "title": "KEV Critical: D-Link DCS-2530L and DCS-2670L Command Injection Vulnerability",
+      "description": "D-Link DCS-2530L and DCS-2670L Devices: D-Link DCS-2530L and DCS-2670L devices contains a command injection vulnerability in the cgi-bin/ddns_enc.cgi. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2020-25079"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071469",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_3230",
+      "title": "KEV Critical: D-Link DNR-322L Download of Code Without Integrity Check Vulnerability",
+      "description": "D-Link DNR-322L: D-Link DNR-322L contains a download of code without integrity check vulnerability that could allow an authenticated attacker to execute OS level commands on the device. The impacted products could be end-of-life (EoL) and/or end-of-service (EoS). Users should discontinue product utilization.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2022-40799"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071474",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_1338",
+      "title": "KEV Critical: PaperCut NG/MF Cross-Site Request Forgery (CSRF) Vulnerability",
+      "description": "PaperCut NG/MF: PaperCut NG/MF contains a cross-site request forgery (CSRF) vulnerability, which, under specific conditions, could potentially enable an attacker to alter security settings or execute arbitrary code. ",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2023-2533"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071479",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_3221",
+      "title": "KEV Critical: Cisco Identity Services Engine Injection Vulnerability",
+      "description": "Cisco Identity Services Engine: Cisco Identity Services Engine contains an injection vulnerability in a specific API of Cisco ISE and Cisco ISE-PIC due to insufficient validation of user-supplied input allowing an attacker to exploit this vulnerability by submitting a crafted API request. Successful exploitation could allow an attacker to perform remote code execution and obtaining root privileges on an affected device.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-20337"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071483",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_8449",
+      "title": "KEV Critical: Cisco Identity Services Engine Injection Vulnerability",
+      "description": "Cisco Identity Services Engine: Cisco Identity Services Engine contains an injection vulnerability in a specific API of Cisco ISE and Cisco ISE-PIC due to insufficient validation of user-supplied input allowing an attacker to exploit this vulnerability by submitting a crafted API request. Successful exploitation could allow an attacker to perform remote code execution and obtaining root privileges on an affected device.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-20281"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071488",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_3829",
+      "title": "KEV Critical: SysAid On-Prem Improper Restriction of XML External Entity Reference Vulnerability",
+      "description": "SysAid SysAid On-Prem: SysAid On-Prem contains an improper restriction of XML external entity reference vulnerability in the Checkin processing functionality, allowing for administrator account takeover and file read primitives.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-2775"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071492",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_4247",
+      "title": "KEV Critical: SysAid On-Prem Improper Restriction of XML External Entity Reference Vulnerability",
+      "description": "SysAid SysAid On-Prem: SysAid On-Prem contains an improper restriction of XML external entity reference vulnerability in the Server URL processing functionality, allowing for administrator account takeover and file read primitives.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-2776"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071496",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_9966",
+      "title": "KEV Critical: Google Chromium ANGLE and GPU Improper Input Validation Vulnerability",
+      "description": "Google Chromium: Google Chromium contains an improper input validation vulnerability in ANGLE and GPU. This vulnerability could allow a remote attacker to potentially perform a sandbox escape via a crafted HTML page. This vulnerability could affect multiple web browsers that utilize Chromium, including, but not limited to, Google Chrome, Microsoft Edge, and Opera.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-6558"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071500",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_1712",
+      "title": "KEV Critical:  CrushFTP Unprotected Alternate Channel Vulnerability",
+      "description": "CrushFTP CrushFTP: CrushFTP contains an unprotected alternate channel vulnerability. When the DMZ proxy feature is not used, mishandles AS2 validation and consequently allows remote attackers to obtain admin access via HTTPS.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-54309"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071505",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_4076",
+      "title": "KEV Critical: Microsoft SharePoint Code Injection Vulnerability",
+      "description": "Microsoft SharePoint: Microsoft SharePoint contains a code injection vulnerability that could allow an authorized attacker to execute code over a network. This vulnerability could be chained with CVE-2025-49706. CVE-2025-53770 is a patch bypass for CVE-2025-49704, and the updates for CVE-2025-53770 include more robust protection than those for CVE-2025-49704.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-49704"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071509",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_9914",
+      "title": "KEV Critical: Microsoft SharePoint Improper Authentication Vulnerability",
+      "description": "Microsoft SharePoint: Microsoft SharePoint contains an improper authentication vulnerability that allows an authorized attacker to perform spoofing over a network. Successfully exploitation could allow an attacker to view sensitive information and make some changes to disclosed information. This vulnerability could be chained with CVE-2025-49704. CVE-2025-53771 is a patch bypass for CVE-2025-49706, and the updates for CVE-2025-53771 include more robust protection than those for CVE-2025-49706.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-49706"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071513",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_2648",
+      "title": "KEV Critical: Microsoft SharePoint Deserialization of Untrusted Data Vulnerability",
+      "description": "Microsoft SharePoint: Microsoft SharePoint Server on-premises contains a deserialization of untrusted data vulnerability that could allow an unauthorized attacker to execute code over a network. This vulnerability could be chained with CVE-2025-53771. CVE-2025-53770 is a patch bypass for CVE-2025-49704, and the updates for CVE-2025-53770 include more robust protection than those for CVE-2025-49704.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-53770"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071517",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_3929",
+      "title": "KEV Critical: Fortinet FortiWeb SQL Injection Vulnerability",
+      "description": "Fortinet FortiWeb: Fortinet FortiWeb contains a SQL injection vulnerability that may allow an unauthenticated attacker to execute unauthorized SQL code or commands via crafted HTTP or HTTPs requests.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-25257"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071522",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_9734",
+      "title": "KEV Critical: Wing FTP Server Improper Neutralization of Null Byte or NUL Character Vulnerability",
+      "description": "Wing FTP Server Wing FTP Server: Wing FTP Server contains an improper neutralization of null byte or NUL character vulnerability that can allow injection of arbitrary Lua code into user session files. This can be used to execute arbitrary system commands with the privileges of the FTP service (root or SYSTEM by default).",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-47812"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071526",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_5646",
+      "title": "KEV Critical: Citrix NetScaler ADC and Gateway Out-of-Bounds Read Vulnerability",
+      "description": "Citrix NetScaler ADC and Gateway: Citrix NetScaler ADC and Gateway contain an out-of-bounds read vulnerability due to insufficient input validation. This vulnerability can lead to memory overread when the NetScaler is configured as a Gateway (VPN virtual server, ICA Proxy, CVPN, RDP Proxy) OR AAA virtual server.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-5777"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071530",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    },
+    {
+      "id": "threat_1755037298_2116",
+      "title": "KEV Critical: Synacor Zimbra Collaboration Suite (ZCS) Server-Side Request Forgery (SSRF) Vulnerability",
+      "description": "Synacor Zimbra Collaboration Suite (ZCS): Synacor Zimbra Collaboration Suite (ZCS) contains a server-side request forgery (SSRF) vulnerability via the ProxyServlet component.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2019-9621"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:21:38.071534",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    }
+  ]
+}
