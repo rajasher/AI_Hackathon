@@ -99,7 +99,7 @@ export default function Index() {
     const utterance = new SpeechSynthesisUtterance(text);
 
     // Configure voice settings based on EZ configuration (could be enhanced with settings)
-    utterance.rate = 2; // Slightly slower for clarity
+    utterance.rate = 1.2; // Slightly slower for clarity
     utterance.pitch = 1.0; // Normal pitch
     utterance.volume = 1; // Slightly quieter
 
@@ -226,28 +226,22 @@ export default function Index() {
 
   const fetchUpdates = async () => {
     console.log("1. [fetchUpdates] Starting...");
-    const data = await generateAIResponse("get daily updates");
+    const data = await fetchDailyUpdates();
     console.log("2. [fetchUpdates] Received data from API:", JSON.stringify(data, null, 2));
 
     if (data) {
-      let parsedData = data;
-      if (data.response && typeof data.response === 'string') {
-        try {
-          parsedData = JSON.parse(data.response);
-          console.log("3. [fetchUpdates] Parsed nested JSON string:", parsedData);
-        } catch (e) {
-          console.error("[fetchUpdates] Failed to parse response JSON string:", e);
-          parsedData = null;
-        }
-      }
+      // The daily_updates endpoint returns a single update object or an array of them.
+      const updates = Array.isArray(data) ? data : [data];
 
-      if (parsedData && Array.isArray(parsedData.tool_results)) {
-        console.log("4. [fetchUpdates] Found tool_results array. Processing...", parsedData.tool_results);
-        const newTasks: Task[] = parsedData.tool_results
-          .filter(result => result.tool === 'get_updates' && result.result)
-          .map((result, index) => {
-            console.log(`5. [fetchUpdates] Mapping result ${index}:`, result);
-            const toolData = result.result;
+      if (updates.length > 0 && updates[0]) {
+        console.log("4. [fetchUpdates] Found updates. Processing...", updates);
+        const newTasks: Task[] = updates
+          .map((toolData, index) => {
+            if (!toolData || !toolData.title || !Array.isArray(toolData.steps)) {
+              console.log(`Skipping invalid item at index ${index}`, toolData);
+              return null;
+            }
+            console.log(`5. [fetchUpdates] Mapping result ${index}:`, toolData);
             const subtasks: SubTask[] = (toolData.steps || []).map((step, subIndex) => {
               const status = step.status ? step.status.toLowerCase() : 'pending';
               return {
@@ -272,14 +266,31 @@ export default function Index() {
               createdAt: new Date(),
               subtasks: subtasks,
             };
-          });
+          }).filter((task): task is Task => task !== null);
         console.log("6. [fetchUpdates] Mapped to newTasks array:", newTasks);
         setTasks(newTasks);
       } else {
-        console.log("4a. [fetchUpdates] Condition failed: `parsedData && Array.isArray(parsedData.tool_results)` was false. No tasks will be set.", { parsedData });
+        console.log("4a. [fetchUpdates] Data was empty or invalid.", { data });
+        setTasks([]);
       }
     } else {
-      console.log("2a. [fetchUpdates] Data from generateAIResponse is falsy.");
+      console.log("2a. [fetchUpdates] Data from fetchDailyUpdates is falsy.");
+    }
+  };
+
+  const fetchDailyUpdates = async (): Promise<any> => {
+    try {
+        const response = await fetch('http://localhost:8002/daily_updates');
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        console.error('Error fetching daily updates:', error);
+        return { tool_results: [] };
     }
   };
 
@@ -1036,7 +1047,9 @@ export default function Index() {
                           </div>
                           <div className="p-2">
                             {subtask.output && (
-                              <pre className="whitespace-pre-wrap font-sans text-xs">{subtask.output}</pre>
+                              <pre className="whitespace-pre-wrap font-sans text-xs">
+                                {typeof subtask.output === 'object' ? JSON.stringify(subtask.output, null, 2) : subtask.output}
+                              </pre>
                             )}
                           </div>
                         </div>
