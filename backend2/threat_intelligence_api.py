@@ -265,6 +265,49 @@ async def get_statistics():
         logger.error(f"Failed to get statistics: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to get statistics: {str(e)}")
 
+@app.get("/cves/top20")
+async def get_top_20_critical_cves():
+    """
+    Get top 20 critical CVEs from NIST NVD and CISA KEV
+    
+    Returns the most critical vulnerabilities published on 2025-07-20 with:
+    - CVSS score >= 9.7
+    - From authoritative sources (NIST NVD, CISA KEV)
+    - Known exploited vulnerabilities marked
+    - News coverage information
+    
+    Response includes:
+    - List of top 20 CVEs with details
+    - Collection metadata and criteria
+    - Source information
+    """
+    try:
+        async with SimpleThreatAgentContext() as agent:
+            result = await agent.get_top_20_critical_cves()
+            
+            if result.get("status") == "success":
+                return {
+                    "status": "success",
+                    "collection_time": result.get("collection_time"),
+                    "total_cves_processed": result.get("total_cves_processed"),
+                    "critical_cves_found": result.get("critical_cves_found"),
+                    "top_20_critical_cves": result.get("top_20_critical_cves"),
+                    "criteria": result.get("criteria"),
+                    "sources": result.get("processed_sources", [])
+                }
+            else:
+                raise HTTPException(
+                    status_code=500, 
+                    detail=f"CVE collection failed: {result.get('error', 'Unknown error')}"
+                )
+                
+    except Exception as e:
+        logger.error(f"Failed to get top 20 critical CVEs: {e}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Failed to get top 20 critical CVEs: {str(e)}"
+        )
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001) 

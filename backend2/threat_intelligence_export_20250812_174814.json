@@ -1,0 +1,79 @@
+{
+  "collection_timestamp": "2025-08-12T17:48:14.114577",
+  "collection_results": {
+    "status": "success",
+    "collection_time": "2025-08-12T17:48:14.114455",
+    "total_cves_processed": 1,
+    "critical_cves_found": 1,
+    "top_20_critical_cves": [
+      {
+        "cve_id": "CVE-2025-53770",
+        "title": "KEV Critical: Microsoft SharePoint Deserialization of Untrusted Data Vulnerability",
+        "description": "Microsoft SharePoint: Microsoft SharePoint Server on-premises contains a deserialization of untrusted data vulnerability that could allow an unauthorized attacker to execute code over a network. This vulnerability could be chained with CVE-2025-53771. CVE-2025-53770 is a patch bypass for CVE-2025-49704, and the updates for CVE-2025-53770 include more robust protection than those for CVE-2025-49704.",
+        "cvss_score": 9.5,
+        "published_date": "2025-07-20",
+        "source": "CISA KEV",
+        "severity": "CRITICAL",
+        "has_known_exploit": true,
+        "vendor_project": "Microsoft",
+        "product": "SharePoint",
+        "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "original_note": "Added to CISA KEV on 2025-07-20",
+        "in_news": true
+      }
+    ],
+    "sources_processed": 2,
+    "threats_found": 1,
+    "threats_stored": 1,
+    "processed_sources": [
+      {
+        "url": "https://services.nvd.nist.gov/rest/json/cves/2.0",
+        "source": "NIST NVD",
+        "threats_found": 0
+      },
+      {
+        "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+        "source": "CISA KEV",
+        "threats_found": 1
+      }
+    ],
+    "criteria": {
+      "cvss_score_threshold": 9.7,
+      "time_period": "2025-07-20 (single day)",
+      "sources": [
+        "NIST NVD",
+        "CISA KEV"
+      ],
+      "additional_filters": [
+        "Known exploits",
+        "In news"
+      ]
+    }
+  },
+  "database_stats": {
+    "total_threats": 1,
+    "severity_distribution": {
+      "critical": 1
+    },
+    "threat_type_distribution": {
+      "vulnerability": 1
+    },
+    "last_updated": "2025-08-12 17:48:14.114453"
+  },
+  "threats": [
+    {
+      "id": "threat_1755038894_9735",
+      "title": "KEV Critical: Microsoft SharePoint Deserialization of Untrusted Data Vulnerability",
+      "description": "Microsoft SharePoint: Microsoft SharePoint Server on-premises contains a deserialization of untrusted data vulnerability that could allow an unauthorized attacker to execute code over a network. This vulnerability could be chained with CVE-2025-53771. CVE-2025-53770 is a patch bypass for CVE-2025-49704, and the updates for CVE-2025-53770 include more robust protection than those for CVE-2025-49704.",
+      "threat_type": "vulnerability",
+      "severity": "critical",
+      "cve_ids": [
+        "CVE-2025-53770"
+      ],
+      "confidence_score": 0.9,
+      "published_date": "2025-08-12T17:48:14.114436",
+      "source_name": "CISA KEV",
+      "source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+    }
+  ]
+}
