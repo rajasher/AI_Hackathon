@@ -8,6 +8,7 @@ declare global {
   }
 }
 
+import ReactMarkdown from 'react-markdown';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -820,25 +821,27 @@ export default function Index() {
                   >
                     {message.sender === 'ai' && (
                       <Avatar className="h-6 w-6 shrink-0">
-                        <img 
+                        <img
                           src="https://cdn.builder.io/api/v1/image/assets%2Fe5b95a00443849c9a85c01bf596294a5%2F4f46a67d02d9493eb078e60c0ed3f53e?format=webp&width=800"
                           alt="EZ Security Robot"
                           className="h-6 w-6 rounded-full object-cover"
                         />
                       </Avatar>
                     )}
-                    <div
-                      className={`max-w-[80%] p-2.5 rounded-lg ${
-                        message.sender === 'user'
-                          ? 'bg-chat-user text-chat-user-foreground'
-                          : 'bg-chat-ai text-chat-ai-foreground'
-                      }`}
-                    >
-                      <p className="text-xs leading-relaxed">{message.content}</p>
-                      <p className="text-xs mt-1 opacity-70">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    </div>
+                     <div
+                       className={`max-w-[80%] p-2.5 rounded-lg ${
+                         message.sender === 'user'
+                           ? 'bg-chat-user text-chat-user-foreground'
+                           : 'bg-chat-ai text-chat-ai-foreground'
+                       }`}
+                     >
+                       <pre className="text-xs leading-relaxed whitespace-pre-wrap font-sans">
+                         {message.content}
+                       </pre>
+                       <p className="text-xs mt-1 opacity-70">
+                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                       </p>
+                     </div>
                     {message.sender === 'user' && (
                       <Avatar className="h-6 w-6 shrink-0">
                         <AvatarFallback className="bg-primary text-primary-foreground">
