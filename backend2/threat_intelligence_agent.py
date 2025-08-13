@@ -351,10 +351,12 @@ class SimpleThreatAgent:
                     cve_id = vuln.get('cveID', '')
                     date_added = vuln.get('dateAdded', '')
                     
-                    # Parse date and check if within 30 days
+                    # For single date queries (like 2025-07-20), only include CVEs added on that exact date
+                    # since CISA KEV doesn't have original publication dates
                     try:
                         added_date = datetime.strptime(date_added, '%Y-%m-%d')
-                        if added_date < cutoff_date:
+                        # Only include if added on our target date (2025-07-20)
+                        if added_date.date() != target_date.date():
                             continue
                     except:
                         continue
@@ -373,13 +375,14 @@ class SimpleThreatAgent:
                         'title': f"KEV Critical: {vulnerability_name}",
                         'description': f"{vendor_project} {product}: {short_description}",
                         'cvss_score': cvss_score,
-                        'published_date': date_added,
+                        'published_date': date_added,  # Using CISA dateAdded as published date for consistency
                         'source': 'CISA KEV',
                         'severity': 'CRITICAL',
                         'has_known_exploit': True,
                         'vendor_project': vendor_project,
                         'product': product,
-                        'source_url': f"https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+                        'source_url': f"https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+                        'original_note': f"Added to CISA KEV on {date_added}"
                     })
                 
                 logger.info(f"Found {len(cves)} recent KEV entries from CISA")
