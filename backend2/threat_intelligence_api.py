@@ -1,7 +1,7 @@
 """
 FastAPI application for the Threat Intelligence Agent
 """
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
@@ -31,17 +31,6 @@ app.add_middleware(
 )
 
 # Pydantic models for request/response
-class CollectionRequest(BaseModel):
-    urls: List[str]
-    ai_instructions: Optional[str] = None
-    run_in_background: bool = False
-
-class CollectionResponse(BaseModel):
-    status: str
-    message: str
-    websites_processed: int
-    sources_checked: List[str]
-    analysis_results: List[Dict[str, Any]]
 
 class SearchRequest(BaseModel):
     query: str
@@ -80,72 +69,7 @@ async def health_check():
         logger.error(f"Health check failed: {e}")
         raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
 
-@app.post("/autonomous-hunt")
-async def autonomous_threat_hunting(background_tasks: BackgroundTasks, run_in_background: bool = False):
-    """Trigger autonomous threat hunting using real web search"""
-    try:
-        if run_in_background:
-            # Run hunting in background
-            background_tasks.add_task(autonomous_hunt_background)
-            return {
-                "status": "success",
-                "message": "Autonomous threat hunting started in background"
-            }
-        else:
-            # Run hunting synchronously
-            async with SimpleThreatAgentContext() as agent:
-                result = await agent.autonomous_threat_hunting()
-                return {
-                    "status": result["status"],
-                    "message": f"Autonomous hunt completed: {result['threats_stored']} new threats found",
-                    "collection_time": result["collection_time"],
-                    "searches_performed": result["searches_performed"],
-                    "threats_found": result["threats_found"],
-                    "threats_stored": result["threats_stored"],
-                    "processed_searches": result["processed_searches"]
-                }
-                
-    except Exception as e:
-        logger.error(f"Failed to run autonomous threat hunting: {e}")
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Failed to run autonomous threat hunting: {str(e)}"
-        )
-
-async def autonomous_hunt_background():
-    """Background task for autonomous threat hunting"""
-    try:
-        async with SimpleThreatAgentContext() as agent:
-            result = await agent.autonomous_threat_hunting()
-            logger.info(f"Background autonomous hunt completed: {result['threats_stored']} threats stored")
-    except Exception as e:
-        logger.error(f"Background autonomous hunt failed: {e}")
-
-@app.post("/collect", response_model=CollectionResponse)
-async def collect_threat_intelligence(
-    request: CollectionRequest,
-    background_tasks: BackgroundTasks
-):
-    """Legacy endpoint - now redirects to autonomous hunting"""
-    try:
-        # Since we now use real web search, redirect to autonomous hunting
-        return await autonomous_threat_hunting(background_tasks, request.run_in_background)
-                
-    except Exception as e:
-        logger.error(f"Failed to collect threat intelligence: {e}")
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Failed to collect threat intelligence: {str(e)}"
-        )
-
-async def collect_threat_intelligence_background(urls: List[str], ai_instructions: Optional[str]):
-    """Background task for collecting threat intelligence"""
-    try:
-        async with ThreatIntelligenceAgent() as agent:
-            await agent.collect_threat_intelligence_from_urls(urls, ai_instructions)
-            logger.info(f"Background threat intelligence collection completed for {len(urls)} URLs")
-    except Exception as e:
-        logger.error(f"Background threat intelligence collection failed: {e}")
+# Removed scheduling and background task endpoints - keeping only direct API endpoints
 
 @app.get("/summary")
 async def get_threat_summary():
