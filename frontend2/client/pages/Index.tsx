@@ -158,6 +158,7 @@ export default function Index() {
 
     if (data) {
         let parsedData = data;
+
         // Check if the main response is a stringified JSON and parse it.
         if (data.response && typeof data.response === 'string') {
             try {
@@ -177,7 +178,7 @@ export default function Index() {
                 if (result.tool === 'get_updates' && result.result) {
                     const toolData = result.result;
                     if (toolData.title) {
-                        response_parts.push(`**${toolData.title}**\n`);
+                        response_parts.push(`**${toolData.title}**\n\n`);
                         if(toolData.status) response_parts.push(`Status: ${toolData.status}\n`);
                         if(toolData.priority) response_parts.push(`Priority: ${toolData.priority}\n`);
 
@@ -298,13 +299,7 @@ export default function Index() {
     const lowerInput = userInput.toLowerCase();
 
     try {
-        const response = await fetch('http://localhost:8000/query', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 'query_input': lowerInput }),
-        });
+        const response = await fetch('http://localhost:8002/daily_updates_summary');
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
