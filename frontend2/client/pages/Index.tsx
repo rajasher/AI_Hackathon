@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, Bot, User, CheckCircle, Clock, Circle, Trash2, Plus, Menu, X, ChevronDown, ChevronRight, Eye, FileText, Settings, Mic, MicOff, MessageSquare, ListTodo } from "lucide-react";
+import { Send, Bot, User, CheckCircle, Clock, Circle, Trash2, Plus, Menu, X, ChevronDown, ChevronRight, Eye, FileText, Settings, Mic, MicOff, MessageSquare, ListTodo, Square } from "lucide-react";
 
 interface Message {
   id: string;
@@ -75,9 +75,9 @@ export default function Index() {
   const [activeTab, setActiveTab] = useState<'updates' | 'tasks' | 'chat'>('chat');
   const [updatesFilter, setUpdatesFilter] = useState<'today' | 'yesterday' | 'week'>('today');
   const [simpleTasks, setSimpleTasks] = useState<SimpleTask[]>([
-    { id: '1', title: 'Review daily security alerts', completed: false, createdAt: new Date() },
-    { id: '2', title: 'Update firewall rules documentation', completed: true, createdAt: new Date() },
-    { id: '3', title: 'Schedule vulnerability scan', completed: false, createdAt: new Date() }
+    { id: '1', title: 'Review MTTx metrics', completed: true, createdAt: new Date("July 21, 2025") },
+    { id: '2', title: 'Prepare for CISO briefing', completed: false, createdAt: new Date("July 21, 2025") },
+    { id: '3', title: 'Check CVE-2025-53770 Patch status', completed: false, createdAt: new Date("July 22, 2025") }
   ]);
   const [newTaskInput, setNewTaskInput] = useState('');
   const [wasVoiceInput, setWasVoiceInput] = useState(false);
@@ -123,6 +123,13 @@ export default function Index() {
 
     setIsSpeaking(true);
     window.speechSynthesis.speak(utterance);
+  };
+
+  const stopSpeaking = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
   };
 
   useEffect(() => {
@@ -914,6 +921,15 @@ export default function Index() {
                   >
                     {isListening ? <MicOff className="h-3 w-3" /> : <Mic className="h-3 w-3" />}
                   </Button>
+                  <Button 
+                    onClick={stopSpeaking} 
+                    size="sm" 
+                    variant={isSpeaking ? "default" : "secondary"}
+                    className={`px-2 h-8 ${isSpeaking ? 'bg-orange-500 hover:bg-orange-600 text-white' : ''}`}
+                    disabled={!isSpeaking}
+                  >
+                    <Square className="h-3 w-3" />
+                  </Button>
                   <Button onClick={() => handleSendMessage(false)} size="sm" className="px-2 h-8">
                     <Send className="h-3 w-3" />
                   </Button>
@@ -1035,7 +1051,7 @@ export default function Index() {
                       <div className="p-2 border-b">Output</div>
                     </div>
                     <div className="min-w-[600px]">
-                      {task.subtasks.map((subtask, index) => (
+                      {task.subtasks.map((subtask) => (
                         <div key={subtask.id} className="grid grid-cols-[auto_1fr_1fr_1fr_1fr] text-xs items-start">
                           <div className="p-2 border-r">{subtask.title}</div>
                           <div className="p-2 border-r">{subtask.description || <span className="text-muted-foreground italic">N/A</span>}</div>
